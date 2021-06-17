@@ -101,6 +101,7 @@ class ImageGenerator:
         self.labels_shape, self.aff, self.n_dims, _, self.header, self.atlas_res = \
             utils.get_volume_info(self.labels_paths[0], aff_ref=np.eye(4))
         self.n_channels = n_channels
+        print('n_channels: '+str(n_channels))
         if generation_labels is not None:
             self.generation_labels = utils.load_array_if_path(generation_labels)
         else:
@@ -128,6 +129,8 @@ class ImageGenerator:
         self.prior_means = utils.load_array_if_path(prior_means)
         self.prior_stds = utils.load_array_if_path(prior_stds)
         self.use_specific_stats_for_channel = use_specific_stats_for_channel
+
+        print('using specific stats ' + str(use_specific_stats_for_channel))
 
         # blurring parameters
         self.blur_range = blur_range
@@ -207,7 +210,9 @@ class ImageGenerator:
                             if self.prior_means.shape[0] / 2 != self.n_channels:
                                 raise ValueError("the number of blocks in prior_means does not match n_channels. This "
                                                  "message is printed because use_specific_stats_for_channel is True.")
+                            print('using multichannel means')
                             tmp_prior_means = self.prior_means[2 * channel:2 * channel + 2, :]
+                            print('temporary prior means: ' + str(tmp_prior_means))
                         else:
                             tmp_prior_means = self.prior_means
                     else:
